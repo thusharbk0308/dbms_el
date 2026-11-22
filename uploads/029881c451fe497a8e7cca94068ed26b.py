@@ -1,1 +1,0 @@
-mocked live blockchain registration test file

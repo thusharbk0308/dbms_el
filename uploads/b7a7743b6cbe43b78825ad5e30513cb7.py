@@ -1,1 +1,0 @@
-print('Version 1 of application codebase')

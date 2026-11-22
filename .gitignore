@@ -25,6 +25,8 @@ wheels/
 *.egg
 
 # Storage & Uploads
+uploads/*
+!uploads/.gitkeep
 backend/uploads/*
 !backend/uploads/.gitkeep
 *.db

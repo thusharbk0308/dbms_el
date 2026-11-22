@@ -1,1 +1,0 @@
-content for asset retrieval test
