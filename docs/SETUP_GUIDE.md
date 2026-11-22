@@ -109,12 +109,35 @@ Access the interactive API documentation at:
 
 ---
 
-## 5. Running Automated Tests
+## 5. Frontend Setup & Execution (React + Vite)
+
+### Install Frontend Dependencies
+```bash
+cd frontend
+npm install
+```
+
+### Launch Frontend Development Server
+```bash
+cd frontend
+npm run dev
+```
+
+The React SPA will start at [http://localhost:5173](http://localhost:5173).
+
+### Build Frontend for Production
+```bash
+cd frontend
+npm run build
+```
+
+---
+
+## 6. Running Automated Tests
 
 ### Run Backend & Blockchain Integration Tests
 ```bash
-cd backend
-python -m pytest -v
+python -m pytest backend/tests -v
 ```
 
 ### Run Smart Contract Tests
