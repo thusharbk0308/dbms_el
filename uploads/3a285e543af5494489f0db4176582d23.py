@@ -1,0 +1,1 @@
+Original research paper on cryptographic timestamping

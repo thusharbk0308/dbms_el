@@ -1,0 +1,1 @@
+print('Hello, ChainProof 2026 Academic DBMS Project!')
