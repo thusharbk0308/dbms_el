@@ -16,6 +16,8 @@ import {
   ShieldCheck,
   Clock,
   Sparkles,
+  ArrowRight,
+  Cpu,
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
@@ -51,164 +53,213 @@ export const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Welcome header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/40 p-6 sm:p-8 rounded-3xl border border-slate-800">
+    <div className="space-y-8 max-w-6xl mx-auto">
+      {/* Editorial Welcome Header */}
+      <div className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <span className="text-xs font-mono font-medium text-blue-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-            <Sparkles className="w-3.5 h-3.5" /> Workspace Overview
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Welcome back, {user?.full_name}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#F8F6F2] border border-[#171717] text-[10px] font-mono font-bold uppercase tracking-wider text-[#171717] mb-2">
+            <span className="w-1.5 h-1.5 bg-[#55AAA7]" />
+            Workspace &bull; {user?.role} Mode
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#171717]">
+            Welcome, {user?.full_name}
+            <span className="inline-block w-2.5 h-2.5 bg-[#E9786D] ml-1.5 align-baseline"></span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Role: <span className="text-slate-200 font-mono font-medium">{user?.role}</span> &bull; Status:{' '}
-            <span className="text-emerald-400 font-medium">Active</span>
+          <p className="text-xs text-[#666666] mt-1 font-medium">
+            Personal Registry Account: <span className="font-mono font-bold text-[#171717]">{user?.email}</span>
           </p>
         </div>
 
-        {isCreator && (
-          <div className="flex gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {isCreator && (
             <Link
               to="/assets/new"
-              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-95 flex items-center gap-2"
+              className="px-4 py-2.5 bg-[#191B20] hover:bg-[#171717] text-white text-xs font-extrabold uppercase tracking-wider border-2 border-[#171717] shadow-[3px_3px_0px_#171717] hover:shadow-[1px_1px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center gap-2"
             >
-              <PlusCircle className="w-4 h-4" />
-              Register New Asset
+              <PlusCircle className="w-4 h-4 text-[#55AAA7]" />
+              Register New IP
             </Link>
-          </div>
-        )}
+          )}
+          <Link
+            to="/verify"
+            className="px-4 py-2.5 bg-[#FFFFFF] hover:bg-[#F8F6F2] text-[#171717] text-xs font-extrabold uppercase tracking-wider border-2 border-[#171717] shadow-[3px_3px_0px_#171717] hover:shadow-[1px_1px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center gap-2"
+          >
+            <FileCheck className="w-4 h-4 text-[#55AAA7]" />
+            Verify File
+          </Link>
+        </div>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium">Total Registered</span>
-            <FolderGit2 className="w-4 h-4 text-blue-400" />
+        <div className="bg-[#FFFFFF] border-2 border-[#171717] p-5 shadow-[4px_4px_0px_#171717]">
+          <div className="flex items-center justify-between text-[#666666] mb-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Total Registered</span>
+            <FolderGit2 className="w-4 h-4 text-[#E9786D]" />
           </div>
-          <p className="text-2xl font-bold text-white">{stats?.total_assets ?? assets.length}</p>
-          <span className="text-[11px] text-slate-400 mt-1 block">
+          <p className="text-2xl font-extrabold font-mono text-[#171717]">{stats?.total_assets ?? assets.length}</p>
+          <span className="text-[10px] font-mono font-bold text-[#55AAA7] mt-1 block">
             {stats?.total_confirmed_assets ?? 0} confirmed on-chain
           </span>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium">Verifications</span>
-            <FileCheck className="w-4 h-4 text-emerald-400" />
+        <div className="bg-[#FFFFFF] border-2 border-[#171717] p-5 shadow-[4px_4px_0px_#171717]">
+          <div className="flex items-center justify-between text-[#666666] mb-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Verifications</span>
+            <FileCheck className="w-4 h-4 text-[#55AAA7]" />
           </div>
-          <p className="text-2xl font-bold text-emerald-400">{stats?.total_verifications ?? 0}</p>
-          <span className="text-[11px] text-slate-400 mt-1 block">
-            {stats?.exact_match_verifications ?? 0} exact matches
+          <p className="text-2xl font-extrabold font-mono text-[#171717]">{stats?.total_verifications ?? 0}</p>
+          <span className="text-[10px] font-mono text-[#666666] mt-1 block">
+            Cryptographic integrity queries
           </span>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium">Active Licenses</span>
-            <Award className="w-4 h-4 text-amber-400" />
+        <div className="bg-[#FFFFFF] border-2 border-[#171717] p-5 shadow-[4px_4px_0px_#171717]">
+          <div className="flex items-center justify-between text-[#666666] mb-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Active Licenses</span>
+            <Award className="w-4 h-4 text-[#82A9D4]" />
           </div>
-          <p className="text-2xl font-bold text-amber-400">{stats?.total_active_licenses ?? 0}</p>
-          <span className="text-[11px] text-slate-400 mt-1 block">
-            {stats?.total_licenses_issued ?? 0} total granted
+          <p className="text-2xl font-extrabold font-mono text-[#171717]">{stats?.total_active_licenses ?? 0}</p>
+          <span className="text-[10px] font-mono text-[#666666] mt-1 block">
+            Commercial & educational
           </span>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium">Disputes Queue</span>
-            <AlertCircle className="w-4 h-4 text-rose-400" />
+        <div className="bg-[#FFFFFF] border-2 border-[#171717] p-5 shadow-[4px_4px_0px_#171717]">
+          <div className="flex items-center justify-between text-[#666666] mb-1">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider">Disputes Logged</span>
+            <AlertCircle className="w-4 h-4 text-[#E9786D]" />
           </div>
-          <p className="text-2xl font-bold text-rose-400">{stats?.open_disputes ?? 0}</p>
-          <span className="text-[11px] text-slate-400 mt-1 block">
-            {stats?.total_disputes ?? 0} total filed
+          <p className="text-2xl font-extrabold font-mono text-[#171717]">{stats?.total_disputes ?? 0}</p>
+          <span className="text-[10px] font-mono text-[#666666] mt-1 block">
+            Competing claims registered
           </span>
         </div>
       </div>
 
-      {/* Recent Assets & Blockchain Anchor Info */}
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Recent Assets Table */}
-        <div className="lg:col-span-2 bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <FolderGit2 className="w-4 h-4 text-blue-400" />
-              Recent Digital Assets
+      {/* Main Content Split: Recent Assets & Blockchain Anchor Info */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Recent Assets List */}
+        <div className="lg:col-span-2 bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b-2 border-[#171717]">
+            <h2 className="text-base font-extrabold uppercase tracking-tight text-[#171717] flex items-center gap-2">
+              <FolderGit2 className="w-4 h-4 text-[#E9786D]" />
+              Recent Digital Asset Registrations
             </h2>
-            <Link to="/assets" className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-medium">
-              View All <ExternalLink className="w-3 h-3" />
+            <Link
+              to="/assets"
+              className="text-xs font-bold uppercase tracking-wider text-[#171717] hover:text-[#E9786D] underline flex items-center gap-1"
+            >
+              View All <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
           {assets.length === 0 ? (
-            <div className="text-center py-12 text-slate-400 text-xs">
-              No digital assets found in your registry yet.
+            <div className="p-8 text-center bg-[#F8F6F2] border-2 border-dashed border-[#171717]">
+              <p className="text-xs font-bold uppercase text-[#666666]">No assets registered yet</p>
+              {isCreator && (
+                <Link
+                  to="/assets/new"
+                  className="mt-3 inline-block px-3 py-1.5 bg-[#191B20] text-white text-xs font-bold uppercase border-2 border-[#171717] shadow-[2px_2px_0px_#171717]"
+                >
+                  Register First Asset
+                </Link>
+              )}
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 font-mono text-[11px]">
-                    <th className="py-2.5 px-3">TITLE & CATEGORY</th>
-                    <th className="py-2.5 px-3">STATUS</th>
-                    <th className="py-2.5 px-3">FINGERPRINT</th>
-                    <th className="py-2.5 px-3">DATE</th>
+                  <tr className="border-b-2 border-[#171717] bg-[#F8F6F2] text-[#171717] font-mono uppercase text-[10px]">
+                    <th className="py-2.5 px-3 font-bold">Asset Title</th>
+                    <th className="py-2.5 px-3 font-bold">Version</th>
+                    <th className="py-2.5 px-3 font-bold">Fingerprint</th>
+                    <th className="py-2.5 px-3 font-bold">Status</th>
+                    <th className="py-2.5 px-3 font-bold text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
-                  {assets.map((asset) => (
-                    <tr key={asset.asset_id} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3 px-3">
-                        <Link to={`/assets/${asset.asset_id}`} className="font-semibold text-slate-200 hover:text-blue-400">
-                          {asset.title}
-                        </Link>
-                        <p className="text-[11px] text-slate-400">{asset.category_name || 'Asset'}</p>
-                      </td>
-                      <td className="py-3 px-3">
-                        <StatusBadge status={asset.registration_status} size="sm" />
-                      </td>
-                      <td className="py-3 px-3 font-mono text-[11px] text-slate-400">
-                        {asset.current_version?.file_hash ? `${asset.current_version.file_hash.slice(0, 10)}...` : 'N/A'}
-                      </td>
-                      <td className="py-3 px-3 text-slate-400 font-mono text-[11px]">
-                        {new Date(asset.created_at).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))}
+                <tbody className="divide-y-2 divide-[#171717]">
+                  {assets.map((asset) => {
+                    const hash = asset.current_version?.file_hash || asset.versions?.[0]?.file_hash;
+                    const versionNum = asset.current_version?.version_number || asset.versions?.[0]?.version_number || 1;
+                    return (
+                      <tr key={asset.asset_id} className="hover:bg-[#F8F6F2] transition-colors">
+                        <td className="py-3 px-3">
+                          <Link
+                            to={`/assets/${asset.asset_id}`}
+                            className="font-bold text-[#171717] hover:text-[#E9786D] transition-colors block truncate max-w-[180px]"
+                          >
+                            {asset.title}
+                          </Link>
+                          <span className="text-[10px] text-[#666666] font-mono">{asset.original_filename}</span>
+                        </td>
+                        <td className="py-3 px-3 font-mono font-bold text-[11px]">
+                          v{versionNum}
+                        </td>
+                        <td className="py-3 px-3 font-mono text-[11px] text-[#666666]">
+                          {hash ? `${hash.slice(0, 8)}...` : 'Pending'}
+                        </td>
+                        <td className="py-3 px-3">
+                          <StatusBadge status={asset.registration_status} size="sm" />
+                        </td>
+                        <td className="py-3 px-3 text-right">
+                          <Link
+                            to={`/assets/${asset.asset_id}`}
+                            className="px-2.5 py-1 bg-[#FFFFFF] hover:bg-[#191B20] hover:text-white text-[#171717] font-bold uppercase text-[10px] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] inline-block transition-all"
+                          >
+                            Details
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
           )}
         </div>
 
-        {/* Blockchain Status Box */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 space-y-4">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            Blockchain Anchoring
-          </h2>
-
-          <div className="space-y-3 font-mono text-xs">
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase">Network Name</span>
-              <p className="text-slate-200">{blockchain?.network_name || 'hardhat_local'}</p>
+        {/* Blockchain Node Status Sidebar */}
+        <div className="space-y-6">
+          <div className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b-2 border-[#171717]">
+              <h2 className="text-base font-extrabold uppercase tracking-tight text-[#171717] flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-[#55AAA7]" />
+                Node Integrity
+              </h2>
+              <span
+                className={`w-2.5 h-2.5 border border-[#171717] ${
+                  blockchain?.connected ? 'bg-[#55AAA7]' : 'bg-[#E9786D]'
+                }`}
+              />
             </div>
 
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase">Contract Address</span>
-              <p className="text-slate-200 truncate select-all">{blockchain?.contract_address || '0x5FbDB231...80aa3'}</p>
-            </div>
+            <div className="space-y-3 font-mono text-xs">
+              <div className="bg-[#F8F6F2] p-3 border-2 border-[#171717]">
+                <span className="text-[10px] text-[#666666] uppercase font-bold block">Smart Contract</span>
+                <p className="text-[11px] font-bold text-[#171717] truncate mt-0.5" title={blockchain?.contract_address}>
+                  {blockchain?.contract_address || '0x5FbDB2315678afecb367f032d93F642f64180aa3'}
+                </p>
+              </div>
 
-            <div className="p-3 bg-slate-950/80 rounded-xl border border-slate-800/80 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase">Current Block Number</span>
-              <p className="text-blue-400 font-bold">#{blockchain?.current_block_number ?? 'Synced'}</p>
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="bg-[#F8F6F2] p-2.5 border-2 border-[#171717]">
+                  <span className="text-[10px] text-[#666666] uppercase font-bold block">Chain ID</span>
+                  <p className="font-bold text-[#171717]">{blockchain?.chain_id ?? 31337}</p>
+                </div>
+                <div className="bg-[#F8F6F2] p-2.5 border-2 border-[#171717]">
+                  <span className="text-[10px] text-[#666666] uppercase font-bold block">Mined Blocks</span>
+                  <p className="font-bold text-[#171717]">#{blockchain?.current_block_number ?? 0}</p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-[#55AAA7]/15 border-2 border-[#171717] text-[11px] text-[#171717] font-medium leading-relaxed">
+                Deterministic SHA-256 digests are anchored via Web3.py to Solidity smart contract <span className="font-bold">IPRegistry.sol</span> on Hardhat.
+              </div>
             </div>
           </div>
 
-          <div className="pt-2">
-            <LegalDisclaimer variant="inline" />
-          </div>
+          <LegalDisclaimer variant="card" />
         </div>
       </div>
     </div>

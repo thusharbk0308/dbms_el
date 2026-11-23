@@ -74,46 +74,50 @@ export const AssetsListPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-[#171717] pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <FolderGit2 className="w-6 h-6 text-blue-400" />
-            Registered Digital Assets
+          <h1 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#171717] flex items-center gap-2">
+            Registered Intellectual Property
+            <span className="inline-block w-2.5 h-2.5 bg-[#E9786D] ml-1"></span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#666666] mt-0.5">
             Browse and manage personal cryptographic registrations, version trees, and smart contract proofs.
           </p>
         </div>
 
         <Link
           to="/assets/new"
-          className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2 self-start active:scale-95"
+          className="px-4 py-2.5 bg-[#191B20] hover:bg-[#171717] text-white font-extrabold text-xs uppercase tracking-wider border-2 border-[#171717] shadow-[3px_3px_0px_#171717] hover:shadow-[1px_1px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] transition-all flex items-center gap-2 self-start"
         >
-          <PlusCircle className="w-4 h-4" />
+          <PlusCircle className="w-4 h-4 text-[#55AAA7]" />
           Register New Asset
         </Link>
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
-        <div className="flex-1 min-w-[240px] relative">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by title, filename, or asset ID..."
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3.5 py-2 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-blue-500"
-          />
+      <div className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[4px_4px_0px_#171717] p-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3 flex-1 min-w-[260px]">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-[#666666] absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by title, filename, or UUID..."
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] pl-9 pr-3 py-2 text-xs font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 flex-wrap text-xs">
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
-            className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+            onChange={(e) =>
+              setSelectedCategory(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))
+            }
+            className="bg-[#F8F6F2] border-2 border-[#171717] px-3 py-2 font-bold text-[#171717] focus:outline-none focus:bg-[#FFFFFF] shadow-[2px_2px_0px_#171717]"
           >
             <option value="ALL">All Categories</option>
             {categories.map((c) => (
@@ -126,18 +130,18 @@ export const AssetsListPage: React.FC = () => {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+            className="bg-[#F8F6F2] border-2 border-[#171717] px-3 py-2 font-bold text-[#171717] focus:outline-none focus:bg-[#FFFFFF] shadow-[2px_2px_0px_#171717]"
           >
             <option value="ALL">All Statuses</option>
+            <option value="REGISTERED">REGISTERED</option>
             <option value="CONFIRMED">CONFIRMED</option>
-            <option value="PENDING">PENDING</option>
             <option value="FAILED">FAILED</option>
           </select>
 
           <button
             onClick={fetchAssets}
-            className="p-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-400 hover:text-white transition-colors"
-            title="Refresh assets"
+            className="p-2 bg-[#FFFFFF] hover:bg-[#F8F6F2] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] hover:shadow-[1px_1px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+            title="Refresh assets list"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -147,77 +151,91 @@ export const AssetsListPage: React.FC = () => {
       {/* Assets Table */}
       {filteredAssets.length === 0 ? (
         <EmptyState
-          title="No digital assets found"
-          description={searchQuery ? 'Try adjusting your search query or filter options.' : 'You have not registered any digital assets yet.'}
+          icon={FolderGit2}
+          title="No registered assets match your search"
+          description="Adjust your search filters or register a new intellectual property file to anchor it to the blockchain."
           actionText="Register New Asset"
-          onAction={() => window.location.href = '/assets/new'}
+          onAction={() => window.location.assign('/assets/new')}
         />
       ) : (
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl overflow-hidden">
+        <div className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 font-mono text-[11px] bg-slate-950/40">
-                  <th className="py-3 px-4">ASSET DETAILS</th>
-                  <th className="py-3 px-4">CATEGORY</th>
-                  <th className="py-3 px-4">VERSION</th>
-                  <th className="py-3 px-4">STATUS</th>
-                  <th className="py-3 px-4">FINGERPRINT</th>
-                  <th className="py-3 px-4">TIMESTAMP</th>
-                  <th className="py-3 px-4 text-right">ACTIONS</th>
+                <tr className="border-b-2 border-[#171717] bg-[#F8F6F2] text-[#171717] font-mono uppercase text-[10px]">
+                  <th className="py-3 px-4 font-bold">Asset Identifier & Title</th>
+                  <th className="py-3 px-4 font-bold">Category</th>
+                  <th className="py-3 px-4 font-bold">Version</th>
+                  <th className="py-3 px-4 font-bold">SHA-256 Fingerprint</th>
+                  <th className="py-3 px-4 font-bold">Blockchain Status</th>
+                  <th className="py-3 px-4 font-bold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
-                {filteredAssets.map((asset) => (
-                  <tr key={asset.asset_id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <Link
-                        to={`/assets/${asset.asset_id}`}
-                        className="font-bold text-white hover:text-blue-400 transition-colors block text-sm"
-                      >
-                        {asset.title}
-                      </Link>
-                      <span className="text-[11px] font-mono text-slate-400">
-                        {asset.original_filename} &bull; {(asset.file_size / 1024).toFixed(1)} KB
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-300 font-medium">
-                      {asset.category_name || 'Uncategorized'}
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-blue-400">
-                      v{asset.current_version?.version_number ?? 1}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <StatusBadge status={asset.registration_status} size="sm" />
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400 select-all">
-                      {asset.current_version?.file_hash
-                        ? `${asset.current_version.file_hash.slice(0, 8)}...${asset.current_version.file_hash.slice(-6)}`
-                        : '—'}
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-slate-400">
-                      {new Date(asset.created_at).toLocaleDateString()}
-                    </td>
-                    <td className="py-3.5 px-4 text-right space-x-2">
-                      {asset.registration_status !== 'CONFIRMED' && (
-                        <button
-                          onClick={() => handleRetryBlockchain(asset.asset_id)}
-                          disabled={retryingId === asset.asset_id}
-                          className="px-2.5 py-1 bg-amber-950/60 hover:bg-amber-900 border border-amber-800/80 rounded-lg text-amber-300 text-[11px] font-medium transition-colors"
-                          title="Retry on-chain submission"
+              <tbody className="divide-y-2 divide-[#171717]">
+                {filteredAssets.map((asset) => {
+                  const hash = asset.current_version?.file_hash || asset.versions?.[0]?.file_hash;
+                  const versionNum = asset.current_version?.version_number || asset.versions?.[0]?.version_number || 1;
+                  return (
+                    <tr key={asset.asset_id} className="hover:bg-[#F8F6F2] transition-colors">
+                      <td className="py-3 px-4">
+                        <Link
+                          to={`/assets/${asset.asset_id}`}
+                          className="font-extrabold text-[#171717] hover:text-[#E9786D] text-sm block"
                         >
-                          {retryingId === asset.asset_id ? 'Retrying...' : 'Retry Anchor'}
-                        </button>
-                      )}
-                      <Link
-                        to={`/assets/${asset.asset_id}`}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[11px] font-medium transition-colors"
-                      >
-                        Details <ExternalLink className="w-3 h-3" />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                          {asset.title}
+                        </Link>
+                        <div className="flex items-center gap-2 mt-0.5 text-[10px] font-mono text-[#666666]">
+                          <span className="font-bold text-[#171717]">{asset.asset_id}</span>
+                          <span>&bull;</span>
+                          <span>{asset.original_filename}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 font-bold uppercase text-[10px]">
+                        <span className="px-2 py-0.5 bg-[#82A9D4]/25 border border-[#171717]">
+                          {categories.find((c) => c.category_id === asset.category_id)?.category_name || 'General'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-xs">
+                        v{versionNum}
+                      </td>
+                      <td className="py-3 px-4 font-mono text-xs">
+                        {hash ? (
+                          <span className="bg-[#F8F6F2] px-2 py-1 border border-[#171717] block w-fit" title={hash}>
+                            {hash.slice(0, 10)}...{hash.slice(-6)}
+                          </span>
+                        ) : (
+                          <span className="text-[#666666]">Pending Hash</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                          <StatusBadge status={asset.registration_status} size="sm" />
+                          {asset.registration_status === 'FAILED' && (
+                            <button
+                              onClick={() => handleRetryBlockchain(asset.asset_id)}
+                              disabled={retryingId === asset.asset_id}
+                              className="px-2 py-0.5 bg-[#E9786D] text-[#171717] border border-[#171717] shadow-[1px_1px_0px_#171717] text-[10px] font-bold uppercase flex items-center gap-1"
+                              title="Retry Blockchain Submission"
+                            >
+                              <RotateCw className={`w-3 h-3 ${retryingId === asset.asset_id ? 'animate-spin' : ''}`} />
+                              Retry
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            to={`/assets/${asset.asset_id}`}
+                            className="px-3 py-1 bg-[#191B20] hover:bg-[#171717] text-white font-extrabold uppercase text-[10px] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] hover:shadow-[1px_1px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+                          >
+                            Details
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

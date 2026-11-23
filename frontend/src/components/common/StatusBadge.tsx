@@ -7,23 +7,28 @@ interface StatusBadgeProps {
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' }) => {
   const normalized = status.toUpperCase();
-  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-2.5 py-1 text-xs';
+  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs';
 
-  let colorClasses = 'bg-slate-800 text-slate-300 border-slate-700';
+  let colorClasses = 'bg-[#F8F6F2] text-[#171717]';
 
   if (normalized === 'CONFIRMED' || normalized === 'ACTIVE' || normalized === 'RESOLVED' || normalized === 'EXACT_MATCH') {
-    colorClasses = 'bg-emerald-950/70 text-emerald-300 border-emerald-800/80';
+    // Teal tone for verified/confirmed
+    colorClasses = 'bg-[#55AAA7] text-[#171717]';
   } else if (normalized === 'PENDING' || normalized === 'UNDER_REVIEW') {
-    colorClasses = 'bg-amber-950/70 text-amber-300 border-amber-800/80';
+    // Blue tone for in-flight/pending
+    colorClasses = 'bg-[#82A9D4] text-[#171717]';
   } else if (normalized === 'FAILED' || normalized === 'REJECTED' || normalized === 'REVOKED' || normalized === 'BLOCKCHAIN_VERIFICATION_FAILED') {
-    colorClasses = 'bg-rose-950/70 text-rose-300 border-rose-800/80';
+    // Coral tone for rejected/failed/revoked
+    colorClasses = 'bg-[#E9786D] text-[#171717]';
   } else if (normalized === 'EXPIRED' || normalized === 'NOT_REGISTERED') {
-    colorClasses = 'bg-slate-800/80 text-slate-400 border-slate-700';
+    colorClasses = 'bg-[#E5E0D8] text-[#171717]';
   }
 
   return (
-    <span className={`inline-flex items-center font-medium rounded-full border ${colorClasses} ${sizeClasses}`}>
-      <span className="w-1.5 h-1.5 rounded-full mr-1.5 bg-current opacity-80" />
+    <span
+      className={`inline-flex items-center font-mono font-bold tracking-wider uppercase border-2 border-[#171717] shadow-[1.5px_1.5px_0px_#171717] ${colorClasses} ${sizeClasses}`}
+    >
+      <span className="w-1.5 h-1.5 mr-1.5 bg-[#171717]" />
       {normalized.replace(/_/g, ' ')}
     </span>
   );

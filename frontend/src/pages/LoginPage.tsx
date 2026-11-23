@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Shield, LogIn, AlertCircle, Sparkles } from 'lucide-react';
+import { Shield, LogIn, AlertCircle, Sparkles, KeyRound } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -34,28 +34,31 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-6 bg-slate-900/80 border border-slate-800 rounded-3xl p-8 backdrop-blur-sm shadow-2xl">
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-2xl mx-auto flex items-center justify-center text-blue-400 mb-4">
-            <Shield className="w-6 h-6" />
+    <div className="min-h-[75vh] flex items-center justify-center py-8 px-4">
+      <div className="max-w-md w-full space-y-6 bg-[#FFFFFF] border-2 border-[#171717] shadow-[8px_8px_0px_#171717] p-8">
+        <div className="space-y-2">
+          <div className="w-10 h-10 bg-[#191B20] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center text-white mb-3">
+            <Shield className="w-5 h-5 text-[#E9786D]" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">Sign In to ChainProof</h2>
-          <p className="text-xs text-slate-400">
-            Access your creator dashboard, registered assets, and licenses
+          <h2 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#171717]">
+            Sign In
+            <span className="inline-block w-2.5 h-2.5 bg-[#E9786D] ml-1.5 align-baseline"></span>
+          </h2>
+          <p className="text-xs text-[#666666]">
+            Authenticate to access your creator dashboard, registered digital assets, and smart contract licenses.
           </p>
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-950/60 border border-rose-800/80 rounded-xl text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+          <div className="p-3 bg-[#E9786D]/20 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] text-[#171717] text-xs font-bold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-[#171717] shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
               Email Address
             </label>
             <input
@@ -63,13 +66,13 @@ export const LoginPage: React.FC = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@chainproof.io"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+              placeholder="alice@chainproof.io"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] px-3.5 py-2.5 text-xs font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
               Password
             </label>
             <input
@@ -78,63 +81,64 @@ export const LoginPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] px-3.5 py-2.5 text-xs font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-blue-600/25 active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#191B20] hover:bg-[#171717] disabled:opacity-50 text-white font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:shadow-[2px_2px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
-              <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-white/20 border-t-white animate-spin" />
             ) : (
               <>
-                <LogIn className="w-4 h-4" />
-                Sign In
+                <LogIn className="w-4 h-4 text-[#E9786D]" />
+                Authenticate
               </>
             )}
           </button>
         </form>
 
-        {/* Demo Fast-Login helper buttons */}
-        <div className="pt-4 border-t border-slate-800 space-y-2">
-          <p className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            Demo Accounts Quick Fill:
+        {/* Quick Demo Logins */}
+        <div className="pt-4 border-t-2 border-[#171717] space-y-2">
+          <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#666666] flex items-center gap-1">
+            <KeyRound className="w-3 h-3 text-[#55AAA7]" /> Quick Demo Accounts (Click to fill)
           </p>
           <div className="grid grid-cols-3 gap-2 text-[10px]">
             <button
               type="button"
-              onClick={() => fillDemo('alice@chainproof.io', 'SecurePassword123!')}
-              className="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-lg text-slate-300 font-mono transition-colors"
+              onClick={() => fillDemo('alice@chainproof.io', 'CreatorPass123!')}
+              className="px-2 py-1.5 bg-[#F8F6F2] hover:bg-[#E9786D] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] font-bold uppercase text-center transition-all truncate"
             >
-              Creator (Alice)
+              Alice (Creator)
             </button>
             <button
               type="button"
-              onClick={() => fillDemo('admin@chainproof.io', 'SecurePassword123!')}
-              className="bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/60 p-2 rounded-lg text-amber-300 font-mono transition-colors"
+              onClick={() => fillDemo('bob@chainproof.io', 'CreatorPass123!')}
+              className="px-2 py-1.5 bg-[#F8F6F2] hover:bg-[#82A9D4] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] font-bold uppercase text-center transition-all truncate"
             >
-              Admin
+              Bob (Creator)
             </button>
             <button
               type="button"
-              onClick={() => fillDemo('verifier@chainproof.io', 'SecurePassword123!')}
-              className="bg-slate-950 hover:bg-slate-800 border border-slate-800 p-2 rounded-lg text-slate-300 font-mono transition-colors"
+              onClick={() => fillDemo('admin@chainproof.io', 'AdminPass123!')}
+              className="px-2 py-1.5 bg-[#F8F6F2] hover:bg-[#55AAA7] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] font-bold uppercase text-center transition-all truncate"
             >
-              Verifier
+              Admin (Root)
             </button>
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-400">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-blue-400 hover:underline font-semibold">
-            Register here
-          </Link>
-        </p>
+        <div className="text-center pt-2">
+          <p className="text-xs text-[#666666]">
+            Don't have an account yet?{' '}
+            <Link to="/register" className="font-extrabold text-[#171717] underline hover:text-[#E9786D]">
+              Register as Creator
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

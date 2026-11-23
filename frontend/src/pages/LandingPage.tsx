@@ -13,6 +13,8 @@ import {
   Lock,
   GitCommit,
   CheckCircle2,
+  Database,
+  Search,
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -36,89 +38,100 @@ export const LandingPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="space-y-20 py-8">
-      {/* Hero Section */}
-      <section className="text-center max-w-4xl mx-auto space-y-6 pt-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/60 border border-blue-800/80 text-blue-400 text-xs font-mono font-medium">
-          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-          Solidity Smart Contract (v0.8.20) + SHA-256 Fingerprinting
+    <div className="space-y-16 py-6 max-w-6xl mx-auto">
+      {/* Editorial Hero Section */}
+      <section className="space-y-6 pt-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#FFFFFF] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] text-[11px] font-mono font-bold uppercase tracking-wider text-[#171717]">
+          <span className="w-2 h-2 bg-[#E9786D] border border-[#171717]" />
+          Solidity (v0.8.20) &bull; SHA-256 &bull; 3NF PostgreSQL
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
-          Cryptographic Proof for <br />
-          <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
-            Digital Intellectual Property
-          </span>
-        </h1>
+        <div className="space-y-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#171717] uppercase leading-[1.08]">
+            Cryptographic Proof for <br className="hidden sm:inline" />
+            <span className="bg-[#E9786D] text-[#171717] px-2 py-0.5 border-2 border-[#171717] shadow-[3px_3px_0px_#171717] inline-block mt-1">
+              Digital Intellectual Property
+            </span>
+          </h1>
 
-        <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          ChainProof enables creators to register digital works, generate deterministic SHA-256 cryptographic fingerprints, anchor immutable block records, verify integrity, and track licensing transparently.
-        </p>
+          <p className="text-base sm:text-lg text-[#666666] max-w-3xl leading-relaxed font-medium">
+            ChainProof provides creators with deterministic SHA-256 cryptographic fingerprints, immutable timestamped Ethereum smart contract anchoring, tamper-evident verification, and verifiable rights management.
+          </p>
+        </div>
 
         {/* Action CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <div className="flex flex-wrap items-center gap-3 pt-2">
           <Link
             to="/verify"
-            className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/25 active:scale-95 flex items-center gap-2"
+            className="px-6 py-3 bg-[#55AAA7] hover:bg-[#489b98] text-[#171717] font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_#171717] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center gap-2"
           >
-            <FileCheck className="w-4 h-4" />
+            <FileCheck className="w-4 h-4 text-[#171717]" />
             Verify a File Now
           </Link>
           <Link
             to="/register"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-blue-600/25 active:scale-95 flex items-center gap-2"
+            className="px-6 py-3 bg-[#191B20] hover:bg-[#171717] text-white font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_#171717] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center gap-2"
           >
             Register as Creator
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#E9786D]" />
+          </Link>
+          <Link
+            to="/analytics"
+            className="px-6 py-3 bg-[#FFFFFF] hover:bg-[#F8F6F2] text-[#171717] font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_#171717] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center gap-2"
+          >
+            <Database className="w-4 h-4 text-[#82A9D4]" />
+            View Analytics
           </Link>
         </div>
 
         {/* Legal Distinction Banner */}
-        <div className="max-w-3xl mx-auto text-left pt-6">
+        <div className="pt-2">
           <LegalDisclaimer variant="card" />
         </div>
       </section>
 
       {/* Live Blockchain Network Card */}
-      <section className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800/80">
+      <section className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] p-6 sm:p-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b-2 border-[#171717]">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-400 mb-1">
-              <Cpu className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#666666] mb-1">
+              <Cpu className="w-4 h-4 text-[#55AAA7]" />
               Live Blockchain Environment
             </div>
-            <h2 className="text-xl font-bold text-white">Smart Contract Anchoring Engine</h2>
+            <h2 className="text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#171717]">
+              Smart Contract Proof Engine
+            </h2>
           </div>
-          <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-emerald-400 font-medium">
-              {blockchain?.connected ? `Network Active (Chain ID: ${blockchain.chain_id})` : 'Hardhat Localhost (Port 8545)'}
+          <div className="flex items-center gap-2 px-3 py-1 bg-[#F8F6F2] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] text-xs font-mono font-bold">
+            <span className={`w-2.5 h-2.5 border border-[#171717] ${blockchain?.connected ? 'bg-[#55AAA7]' : 'bg-[#E9786D]'}`} />
+            <span className="text-[#171717]">
+              {blockchain?.connected ? `NETWORK ACTIVE &bull; CHAIN ID ${blockchain.chain_id}` : 'HARDHAT LOCALHOST (PORT 8545)'}
             </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60">
-            <span className="text-[11px] text-slate-400 uppercase tracking-wider">Contract Address</span>
-            <p className="text-xs font-mono text-slate-200 truncate mt-1" title={blockchain?.contract_address}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717]">
+            <span className="text-[10px] text-[#666666] uppercase font-bold font-mono tracking-wider block">Contract Address</span>
+            <p className="text-xs font-mono font-bold text-[#171717] truncate mt-1.5" title={blockchain?.contract_address}>
               {blockchain?.contract_address ? `${blockchain.contract_address.slice(0, 10)}...${blockchain.contract_address.slice(-6)}` : '0x5FbDB231...80aa3'}
             </p>
           </div>
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60">
-            <span className="text-[11px] text-slate-400 uppercase tracking-wider">Current Block</span>
-            <p className="text-base font-bold font-mono text-blue-400 mt-1">
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717]">
+            <span className="text-[10px] text-[#666666] uppercase font-bold font-mono tracking-wider block">Current Block</span>
+            <p className="text-xl font-mono font-extrabold text-[#171717] mt-1">
               #{blockchain?.current_block_number ?? 12}
             </p>
           </div>
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60">
-            <span className="text-[11px] text-slate-400 uppercase tracking-wider">Total Assets</span>
-            <p className="text-base font-bold text-white mt-1">
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717]">
+            <span className="text-[10px] text-[#666666] uppercase font-bold font-mono tracking-wider block">Total Registered Assets</span>
+            <p className="text-xl font-mono font-extrabold text-[#171717] mt-1">
               {stats?.total_assets ?? 0}
             </p>
           </div>
-          <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/60">
-            <span className="text-[11px] text-slate-400 uppercase tracking-wider">Verifications Done</span>
-            <p className="text-base font-bold text-emerald-400 mt-1">
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717]">
+            <span className="text-[10px] text-[#666666] uppercase font-bold font-mono tracking-wider block">Verifications Executed</span>
+            <p className="text-xl font-mono font-extrabold text-[#55AAA7] mt-1">
               {stats?.total_verifications ?? 0}
             </p>
           </div>
@@ -126,43 +139,91 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Core Architectural Pillars */}
-      <section className="max-w-5xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h3 className="text-2xl font-bold text-white">How ChainProof Operates</h3>
-          <p className="text-sm text-slate-400 max-w-lg mx-auto">
-            A 3NF relational PostgreSQL database handles platform state, while Solidity anchors tamper-proof SHA-256 digests.
-          </p>
+      <section className="space-y-6">
+        <div className="border-b-2 border-[#171717] pb-3 flex items-center justify-between">
+          <div>
+            <h3 className="text-2xl font-extrabold uppercase tracking-tight text-[#171717]">
+              System Architecture & Methodology
+            </h3>
+            <p className="text-xs text-[#666666] mt-0.5">
+              Dual-layer hybrid design: PostgreSQL 3NF relational metadata coupled with EVM timestamp anchoring.
+            </p>
+          </div>
+          <span className="text-xs font-mono font-bold text-[#E9786D] uppercase border-2 border-[#171717] bg-[#FFFFFF] px-2 py-0.5 shadow-[2px_2px_0px_#171717]">
+            01 / SPECIFICATION
+          </span>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-slate-700 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-blue-950 border border-blue-800 flex items-center justify-center text-blue-400">
+          <div className="bg-[#FFFFFF] border-2 border-[#171717] p-6 shadow-[4px_4px_0px_#171717] space-y-3">
+            <div className="w-10 h-10 bg-[#82A9D4] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center text-[#171717]">
               <Fingerprint className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-semibold text-white">SHA-256 Fingerprinting</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Files are streamed in 64KB chunks to generate deterministic cryptographic digests. Even a single bit alteration changes the hash completely.
+            <h4 className="text-base font-extrabold uppercase tracking-tight text-[#171717]">
+              SHA-256 Fingerprinting
+            </h4>
+            <p className="text-xs text-[#666666] leading-relaxed">
+              Files are processed in 64KB binary streams to generate 64-character lowercase hex digests. A 1-bit alteration completely changes the output due to the avalanche effect.
             </p>
           </div>
 
-          <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-slate-700 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400">
+          <div className="bg-[#FFFFFF] border-2 border-[#171717] p-6 shadow-[4px_4px_0px_#171717] space-y-3">
+            <div className="w-10 h-10 bg-[#55AAA7] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center text-[#171717]">
               <GitCommit className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-semibold text-white">Immutable On-Chain State</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Solidity smart contract IPRegistry.sol records fingerprints with block numbers and timestamps. Records cannot be deleted or manipulated.
+            <h4 className="text-base font-extrabold uppercase tracking-tight text-[#171717]">
+              EVM Smart Contract
+            </h4>
+            <p className="text-xs text-[#666666] leading-relaxed">
+              Solidity contract IPRegistry.sol anchors the SHA-256 fingerprint alongside block number and timestamp. On-chain states cannot be overwritten, modified, or silently deleted.
             </p>
           </div>
 
-          <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl space-y-3 hover:border-slate-700 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400">
+          <div className="bg-[#FFFFFF] border-2 border-[#171717] p-6 shadow-[4px_4px_0px_#171717] space-y-3">
+            <div className="w-10 h-10 bg-[#E9786D] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center text-[#171717]">
               <CheckCircle2 className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-semibold text-white">Public Verification</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Anyone can upload a file or paste a fingerprint to verify authenticity and inspect competing claims without needing an account.
+            <h4 className="text-base font-extrabold uppercase tracking-tight text-[#171717]">
+              Objective Verification
+            </h4>
+            <p className="text-xs text-[#666666] leading-relaxed">
+              Anyone can upload a file or paste a hash to query both the PostgreSQL database and the EVM smart contract independently, establishing prior possession without friction.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Step-by-Step */}
+      <section className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] p-6 sm:p-8 space-y-6">
+        <div className="border-b-2 border-[#171717] pb-3">
+          <h3 className="text-xl font-extrabold uppercase tracking-tight text-[#171717]">
+            How It Works — Step by Step
+          </h3>
+          <p className="text-xs text-[#666666]">
+            From file upload to blockchain registration and public verification.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-4 gap-4 text-xs">
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] space-y-2">
+            <span className="font-mono font-bold text-sm text-[#E9786D]">STEP 01</span>
+            <p className="font-extrabold uppercase text-[#171717]">Asset Upload</p>
+            <p className="text-[#666666] leading-relaxed">Creator uploads file with metadata and classification category.</p>
+          </div>
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] space-y-2">
+            <span className="font-mono font-bold text-sm text-[#55AAA7]">STEP 02</span>
+            <p className="font-extrabold uppercase text-[#171717]">SHA-256 Hashing</p>
+            <p className="text-[#666666] leading-relaxed">Server generates deterministic 64-char cryptographic digest.</p>
+          </div>
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] space-y-2">
+            <span className="font-mono font-bold text-sm text-[#82A9D4]">STEP 03</span>
+            <p className="font-extrabold uppercase text-[#171717]">EVM Anchoring</p>
+            <p className="text-[#666666] leading-relaxed">Fingerprint is submitted to IPRegistry.sol and mined into a block.</p>
+          </div>
+          <div className="bg-[#F8F6F2] p-4 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] space-y-2">
+            <span className="font-mono font-bold text-sm text-[#191B20]">STEP 04</span>
+            <p className="font-extrabold uppercase text-[#171717]">Verification</p>
+            <p className="text-[#666666] leading-relaxed">Public auditors test file authenticity against both DB and on-chain records.</p>
           </div>
         </div>
       </section>

@@ -2,36 +2,60 @@
 
 @layer base {
   :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Space Grotesk', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+
+    --bg-main: #F8F6F2;
+    --surface-white: #FFFFFF;
+    --text-primary: #171717;
+    --text-secondary: #666666;
+    --border-dark: #171717;
+    --accent-coral: #E9786D;
+    --accent-teal: #55AAA7;
+    --accent-blue: #82A9D4;
+    --btn-dark: #191B20;
   }
 
   body {
-    background-color: #0b0f19;
-    color: #f1f5f9;
+    background-color: #F8F6F2;
+    color: #171717;
     font-family: var(--font-sans);
+    letter-spacing: -0.01em;
   }
 
-  code, pre {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: #171717;
+  }
+
+  code, pre, .font-mono {
     font-family: var(--font-mono);
   }
 }
 
-/* Custom scrollbars */
+/* Custom Neo-Brutalist scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #F8F6F2;
+  border-left: 2px solid #171717;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+  background: #191B20;
+  border: 2px solid #171717;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #E9786D;
+}
+
+/* Neo-Brutalist Selection */
+::selection {
+  background-color: #E9786D;
+  color: #171717;
 }

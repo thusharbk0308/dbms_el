@@ -29,28 +29,31 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-6 bg-slate-900/80 border border-slate-800 rounded-3xl p-8 backdrop-blur-sm shadow-2xl">
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 bg-blue-600/20 border border-blue-500/30 rounded-2xl mx-auto flex items-center justify-center text-blue-400 mb-4">
-            <Shield className="w-6 h-6" />
+    <div className="min-h-[75vh] flex items-center justify-center py-8 px-4">
+      <div className="max-w-md w-full space-y-6 bg-[#FFFFFF] border-2 border-[#171717] shadow-[8px_8px_0px_#171717] p-8">
+        <div className="space-y-2">
+          <div className="w-10 h-10 bg-[#191B20] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center text-white mb-3">
+            <Shield className="w-5 h-5 text-[#55AAA7]" />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">Create an Account</h2>
-          <p className="text-xs text-slate-400">
-            Join ChainProof to establish timestamped cryptographic proofs
+          <h2 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#171717]">
+            Register Account
+            <span className="inline-block w-2.5 h-2.5 bg-[#55AAA7] ml-1.5 align-baseline"></span>
+          </h2>
+          <p className="text-xs text-[#666666]">
+            Create a creator or auditor profile to establish cryptographic intellectual property proofs.
           </p>
         </div>
 
         {error && (
-          <div className="p-3 bg-rose-950/60 border border-rose-800/80 rounded-xl text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+          <div className="p-3 bg-[#E9786D]/20 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] text-[#171717] text-xs font-bold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-[#171717] shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
               Full Legal Name / Creator Handle
             </label>
             <input
@@ -58,13 +61,13 @@ export const RegisterPage: React.FC = () => {
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="e.g. Alice Chen"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+              placeholder="Alice Chen"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] px-3.5 py-2.5 text-xs font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
               Email Address
             </label>
             <input
@@ -72,13 +75,13 @@ export const RegisterPage: React.FC = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="alice@example.com"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+              placeholder="alice@chainproof.io"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] px-3.5 py-2.5 text-xs font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
               Password (min. 8 characters)
             </label>
             <input
@@ -88,47 +91,48 @@ export const RegisterPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] px-3.5 py-2.5 text-xs font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
               Platform Role
             </label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as UserRole)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] px-3.5 py-2.5 text-xs font-bold text-[#171717] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
             >
-              <option value="CREATOR">Creator (Upload & Register Assets)</option>
-              <option value="VERIFIER">Verifier (Search & Verify Registrations)</option>
-              <option value="ADMINISTRATOR">Administrator (Audit & Dispute Management)</option>
+              <option value="CREATOR">CREATOR (Upload & Register Digital IP)</option>
+              <option value="VERIFIER">VERIFIER (Audit & Verify Authenticity)</option>
             </select>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-blue-600/25 active:scale-95 flex items-center justify-center gap-2 pt-3"
+            className="w-full py-3 bg-[#191B20] hover:bg-[#171717] disabled:opacity-50 text-white font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:shadow-[2px_2px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
-              <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-white/20 border-t-white animate-spin" />
             ) : (
               <>
-                <UserPlus className="w-4 h-4" />
-                Register Account
+                <UserPlus className="w-4 h-4 text-[#55AAA7]" />
+                Create Account
               </>
             )}
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400">
-          Already registered?{' '}
-          <Link to="/login" className="text-blue-400 hover:underline font-semibold">
-            Sign in
-          </Link>
-        </p>
+        <div className="text-center pt-2">
+          <p className="text-xs text-[#666666]">
+            Already have an account?{' '}
+            <Link to="/login" className="font-extrabold text-[#171717] underline hover:text-[#E9786D]">
+              Sign In
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -79,22 +79,22 @@ export const DisputesPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-[#171717] pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <AlertCircle className="w-6 h-6 text-rose-400" />
+          <h1 className="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#171717] flex items-center gap-2">
             Dispute Tracking & Resolution
+            <span className="inline-block w-2.5 h-2.5 bg-[#E9786D] ml-1"></span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#666666] mt-0.5">
             Submit copyright or authorship disputes with evidence attachments for administrative review.
           </p>
         </div>
 
         <button
           onClick={() => { setIsModalOpen(true); setFormError(null); }}
-          className="px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2 self-start active:scale-95"
+          className="px-4 py-2.5 bg-[#E9786D] hover:bg-[#d66a60] text-[#171717] font-extrabold text-xs uppercase tracking-wider border-2 border-[#171717] shadow-[3px_3px_0px_#171717] hover:shadow-[1px_1px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] transition-all flex items-center gap-2 self-start"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#171717]" />
           File a Dispute
         </button>
       </div>
@@ -102,9 +102,10 @@ export const DisputesPage: React.FC = () => {
       {/* Disputes List */}
       {disputes.length === 0 ? (
         <EmptyState
-          title="No disputes filed"
-          description="You currently have no open or resolved dispute filings on record."
-          actionText="File a Dispute"
+          icon={AlertCircle}
+          title="No disputes on record"
+          description="The intellectual property registry contains zero contested ownership claims at this time."
+          actionText="File New Dispute"
           onAction={() => setIsModalOpen(true)}
         />
       ) : (
@@ -112,96 +113,110 @@ export const DisputesPage: React.FC = () => {
           {disputes.map((d) => (
             <div
               key={d.dispute_id}
-              className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-3 hover:border-slate-700 transition-colors"
+              className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[4px_4px_0px_#171717] p-6 space-y-3"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b-2 border-[#171717]">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-xs text-[#171717]">
+                    Dispute #{d.dispute_id}
+                  </span>
+                  <span className="text-xs text-[#666666] font-mono">&bull; Target: {d.asset_id}</span>
+                </div>
                 <div className="flex items-center gap-2">
                   <StatusBadge status={d.dispute_status} size="sm" />
-                  <span className="font-mono text-xs text-slate-400">
-                    Dispute #{d.dispute_id} &bull; Target Asset: {d.asset_id}
+                  <span className="text-[10px] font-mono text-[#666666]">
+                    {d.created_at ? new Date(d.created_at).toLocaleDateString() : ''}
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-slate-400">
-                  {new Date(d.created_at).toLocaleString()}
-                </span>
               </div>
 
-              <div>
-                <span className="text-slate-400 text-[10px] uppercase font-semibold">Claim Details:</span>
-                <p className="text-xs text-slate-200 mt-0.5 leading-relaxed bg-slate-950/40 p-3 rounded-xl border border-slate-800/60">
-                  {d.description}
+              <div className="text-xs space-y-2">
+                <p className="text-[#171717] font-medium leading-relaxed">
+                  <strong>Contestation Claims:</strong> {d.description || 'No description provided.'}
                 </p>
-              </div>
 
-              {d.resolution_notes && (
-                <div className="p-3 bg-blue-950/30 border border-blue-800/40 rounded-xl text-xs space-y-1">
-                  <span className="text-blue-300 font-semibold uppercase text-[10px] block">
-                    Administrator Resolution Notes:
-                  </span>
-                  <p className="text-slate-300 text-[11px]">{d.resolution_notes}</p>
-                </div>
-              )}
+                {d.resolution_notes && (
+                  <div className="bg-[#F8F6F2] p-3 border border-[#171717]">
+                    <span className="text-[10px] font-mono font-bold uppercase text-[#55AAA7] block">
+                      Admin Resolution Findings
+                    </span>
+                    <p className="text-[#171717] mt-0.5">{d.resolution_notes}</p>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* File Dispute Modal */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="File a Copyright / Ownership Dispute">
+      {/* Modal: File Dispute */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="File Intellectual Property Dispute"
+      >
         <form onSubmit={handleSubmitDispute} className="space-y-4">
           {formError && (
-            <div className="p-3 bg-rose-950/60 border border-rose-800/80 rounded-xl text-rose-300 text-xs flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 shrink-0" />
-              <span>{formError}</span>
+            <div className="p-3 bg-[#E9786D]/20 border-2 border-[#171717] text-[#171717] text-xs font-bold">
+              {formError}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold uppercase text-slate-300 mb-1.5">
-              Target Asset Identifier (asset_id) *
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
+              Contested Asset Identifier (UUID) *
             </label>
             <input
               type="text"
               required
               value={assetId}
               onChange={(e) => setAssetId(e.target.value)}
-              placeholder="e.g. ast-8f4b2c1e89a0"
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 font-mono"
+              placeholder="e.g. ast-7a2b9c1d-006"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] p-2.5 text-xs font-bold font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase text-slate-300 mb-1.5">
-              Dispute Grounds & Evidence Narrative *
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
+              Contestation Grounds & Detailed Explanation *
             </label>
             <textarea
-              required
               rows={4}
+              required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Explain the conflict, prior publication dates, or evidence of original authorship..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100"
+              placeholder="State reasons for claim contestation, evidence of prior authorship, or copyright infringement..."
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] p-2.5 text-xs font-bold"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase text-slate-300 mb-1.5">
-              Attach Evidence Document (PDF, Image, etc.)
+            <label className="block text-xs font-extrabold text-[#171717] mb-1 uppercase tracking-wider">
+              Evidence Document (Optional)
             </label>
             <input
               type="file"
               onChange={(e) => setEvidenceFile(e.target.files?.[0] || null)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-xs text-slate-200"
+              className="w-full bg-[#F8F6F2] border-2 border-[#171717] p-2 text-xs font-bold"
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-lg"
-          >
-            {isSubmitting ? 'Submitting Dispute...' : 'Submit Dispute for Review'}
-          </button>
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 bg-[#FFFFFF] text-[#171717] border-2 border-[#171717] font-bold text-xs uppercase"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-[#E9786D] text-[#171717] border-2 border-[#171717] font-bold text-xs uppercase shadow-[2px_2px_0px_#171717]"
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Dispute'}
+            </button>
+          </div>
         </form>
       </Modal>
     </div>

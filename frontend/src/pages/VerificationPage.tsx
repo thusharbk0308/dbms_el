@@ -17,6 +17,9 @@ import {
   ExternalLink,
   Layers,
   HelpCircle,
+  Clock,
+  ArrowRight,
+  ShieldAlert,
 } from 'lucide-react';
 
 export const VerificationPage: React.FC = () => {
@@ -74,81 +77,84 @@ export const VerificationPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-4">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="w-12 h-12 bg-emerald-950/60 border border-emerald-800/80 rounded-2xl mx-auto flex items-center justify-center text-emerald-400 mb-2">
-          <FileCheck className="w-6 h-6" />
+      {/* Editorial Header */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FFFFFF] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] text-[10px] font-mono font-bold uppercase tracking-wider text-[#171717]">
+          <span className="w-2 h-2 bg-[#55AAA7] border border-[#171717]" />
+          Zero-Knowledge Public Auditor Engine
         </div>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">
-          Cryptographic File Verification
+
+        <h1 className="text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-[#171717]">
+          Verify Digital Ownership Claims
+          <span className="inline-block w-3 h-3 bg-[#E9786D] ml-1.5 align-baseline"></span>
         </h1>
-        <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-          Upload any file or provide a SHA-256 fingerprint to verify cryptographic authenticity, inspect timestamped blockchain registration proofs, and check competing claims.
+
+        <p className="text-xs sm:text-sm text-[#666666] max-w-2xl mx-auto font-medium">
+          Upload any file or enter a SHA-256 digest to verify integrity, cross-examine blockchain timestamps, and detect potential competing ownership claims.
         </p>
       </div>
 
-      <LegalDisclaimer variant="banner" />
+      <LegalDisclaimer variant="card" />
 
-      {/* Verification Tabs */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
-        <div className="flex border-b border-slate-800 pb-4 gap-4">
+      {/* Verification Query Card */}
+      <div className="bg-[#FFFFFF] border-2 border-[#171717] shadow-[6px_6px_0px_#171717] p-6 sm:p-8 space-y-6">
+        {/* Mode Switcher Tabs */}
+        <div className="flex border-b-2 border-[#171717] gap-3 pb-3">
           <button
             onClick={() => { setTab('FILE'); setResult(null); setError(null); }}
-            className={`pb-2 text-xs font-semibold uppercase tracking-wider transition-colors border-b-2 flex items-center gap-2 ${
+            className={`px-4 py-2 font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] transition-all ${
               tab === 'FILE'
-                ? 'border-blue-500 text-white'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'bg-[#191B20] text-white shadow-[2px_2px_0px_#171717]'
+                : 'bg-[#F8F6F2] text-[#171717] hover:bg-[#FFFFFF]'
             }`}
           >
-            <UploadCloud className="w-4 h-4" />
-            Upload File for Verification
+            Verify by File Upload
           </button>
           <button
             onClick={() => { setTab('HASH'); setResult(null); setError(null); }}
-            className={`pb-2 text-xs font-semibold uppercase tracking-wider transition-colors border-b-2 flex items-center gap-2 ${
+            className={`px-4 py-2 font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] transition-all ${
               tab === 'HASH'
-                ? 'border-blue-500 text-white'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'bg-[#191B20] text-white shadow-[2px_2px_0px_#171717]'
+                : 'bg-[#F8F6F2] text-[#171717] hover:bg-[#FFFFFF]'
             }`}
           >
-            <Search className="w-4 h-4" />
-            Lookup by SHA-256 Hash
+            Verify by SHA-256 Digest
           </button>
         </div>
 
         {error && (
-          <div className="p-4 bg-rose-950/60 border border-rose-800/80 rounded-2xl text-rose-300 text-xs flex items-center gap-3">
-            <XCircle className="w-5 h-5 shrink-0" />
+          <div className="p-3.5 bg-[#E9786D]/20 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] text-[#171717] text-xs font-bold flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-[#171717] shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        {/* Tab 1: File Upload */}
-        {tab === 'FILE' && (
+        {tab === 'FILE' ? (
           <form onSubmit={handleVerifyFile} className="space-y-4">
-            <div className="border-2 border-dashed border-slate-800 hover:border-emerald-500/80 bg-slate-950/60 rounded-2xl p-8 text-center transition-all cursor-pointer relative">
+            <div className="relative border-2 border-dashed border-[#171717] bg-[#F8F6F2] hover:bg-[#FFFFFF] p-8 text-center transition-all cursor-pointer group">
               <input
                 type="file"
                 required
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                onChange={(e) => {
+                  setFile(e.target.files?.[0] || null);
+                  setResult(null);
+                }}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
-              <div className="flex flex-col items-center justify-center space-y-2">
-                <UploadCloud className="w-8 h-8 text-emerald-400" />
-                {file ? (
-                  <div>
-                    <p className="text-sm font-semibold text-white">{file.name}</p>
-                    <p className="text-xs text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
-                  </div>
-                ) : (
-                  <div>
-                    <p className="text-sm font-medium text-slate-200">
-                      Click to choose a file or drag and drop
-                    </p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      File will be hashed in streaming chunks to verify match.
-                    </p>
-                  </div>
+              <div className="space-y-2 pointer-events-none">
+                <div className="w-12 h-12 bg-[#FFFFFF] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center mx-auto text-[#171717] group-hover:bg-[#55AAA7] transition-colors">
+                  <UploadCloud className="w-6 h-6" />
+                </div>
+                <p className="text-xs font-extrabold uppercase text-[#171717]">
+                  {file ? file.name : 'Select or Drag & Drop File to Verify'}
+                </p>
+                <p className="text-[11px] text-[#666666]">
+                  File is streamed to compute SHA-256 locally on server without persistent storage
+                </p>
+                {file && (
+                  <p className="text-[10px] font-mono font-bold text-[#55AAA7]">
+                    Ready to verify &bull; {(file.size / 1024).toFixed(1)} KB
+                  </p>
                 )}
               </div>
             </div>
@@ -156,54 +162,51 @@ export const VerificationPage: React.FC = () => {
             <button
               type="submit"
               disabled={isVerifying || !file}
-              className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/25 active:scale-95 flex items-center justify-center gap-2"
+              className="w-full py-3.5 bg-[#55AAA7] hover:bg-[#489b98] disabled:opacity-50 text-[#171717] font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:shadow-[2px_2px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-2"
             >
               {isVerifying ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Hashing & Cross-Verifying with Smart Contract...
-                </span>
+                <>
+                  <span className="w-4 h-4 border-2 border-[#171717] border-t-white animate-spin" />
+                  Streaming Binary & Querying Blockchain...
+                </>
               ) : (
                 <>
-                  <FileCheck className="w-4 h-4" />
-                  Verify File Integrity & Smart Contract Record
+                  <ShieldCheck className="w-4 h-4 text-[#171717]" />
+                  Execute Cryptographic Verification
                 </>
               )}
             </button>
           </form>
-        )}
-
-        {/* Tab 2: Hash Lookup */}
-        {tab === 'HASH' && (
+        ) : (
           <form onSubmit={handleVerifyHash} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase text-slate-300 mb-1.5">
-                Submitted 64-Hex SHA-256 Hash
+              <label className="block text-xs font-extrabold uppercase tracking-wider text-[#171717] mb-1">
+                SHA-256 Hash Digest (64-character Hexadecimal)
               </label>
               <input
                 type="text"
                 required
                 value={submittedHash}
                 onChange={(e) => setSubmittedHash(e.target.value)}
-                placeholder="e.g. a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-100 placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors"
+                placeholder="e.g. e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                className="w-full bg-[#F8F6F2] border-2 border-[#171717] p-3 text-xs font-mono font-bold text-[#171717] placeholder-[#666666] focus:outline-none focus:bg-[#FFFFFF] focus:shadow-[2px_2px_0px_#171717] transition-all"
               />
             </div>
 
             <button
               type="submit"
-              disabled={isVerifying || !submittedHash}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-blue-600/25 active:scale-95 flex items-center justify-center gap-2"
+              disabled={isVerifying || submittedHash.trim().length !== 64}
+              className="w-full py-3.5 bg-[#191B20] hover:bg-[#171717] disabled:opacity-50 text-white font-extrabold uppercase tracking-wider text-xs border-2 border-[#171717] shadow-[4px_4px_0px_#171717] hover:shadow-[2px_2px_0px_#171717] hover:translate-x-[1px] hover:translate-y-[1px] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-2"
             >
               {isVerifying ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  Searching Registry & Smart Contract...
-                </span>
+                <>
+                  <span className="w-4 h-4 border-2 border-white/20 border-t-white animate-spin" />
+                  Querying Blockchain Registry...
+                </>
               ) : (
                 <>
-                  <Search className="w-4 h-4" />
-                  Lookup Fingerprint
+                  <Search className="w-4 h-4 text-[#E9786D]" />
+                  Query Fingerprint on Smart Contract
                 </>
               )}
             </button>
@@ -211,142 +214,141 @@ export const VerificationPage: React.FC = () => {
         )}
       </div>
 
-      {/* Verification Results Panel */}
+      {/* Structured Result Panels */}
       {result && (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in duration-300">
-          {/* Outcome Banner */}
-          {result.verification_result === 'EXACT_MATCH' && (
-            <div className="p-4 bg-emerald-950/60 border border-emerald-800/80 rounded-2xl flex items-center gap-3 text-emerald-300">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400 shrink-0" />
-              <div>
-                <h3 className="text-base font-bold text-white">Cryptographic Exact Match Verified</h3>
-                <p className="text-xs text-emerald-300/80">
-                  The submitted file matches an established registration and on-chain blockchain record.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {result.verification_result === 'NOT_REGISTERED' && (
-            <div className="p-4 bg-amber-950/60 border border-amber-800/80 rounded-2xl flex items-center gap-3 text-amber-300">
-              <AlertTriangle className="w-8 h-8 text-amber-400 shrink-0" />
-              <div>
-                <h3 className="text-base font-bold text-white">Fingerprint Not Found in Registry</h3>
-                <p className="text-xs text-amber-300/80">
-                  No matching registered digital asset was found for this fingerprint.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {result.verification_result === 'BLOCKCHAIN_VERIFICATION_FAILED' && (
-            <div className="p-4 bg-rose-950/60 border border-rose-800/80 rounded-2xl flex items-center gap-3 text-rose-300">
-              <XCircle className="w-8 h-8 text-rose-400 shrink-0" />
-              <div>
-                <h3 className="text-base font-bold text-white">Blockchain Verification Mismatch</h3>
-                <p className="text-xs text-rose-300/80">
-                  The cryptographic fingerprint in the database does NOT match the immutable on-chain smart contract record!
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Fingerprint Digest Display */}
-          <div className="p-4 bg-slate-950/80 border border-slate-800 rounded-2xl font-mono text-xs space-y-1">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="text-[10px] uppercase">Computed SHA-256 Digest:</span>
-              <button
-                onClick={() => copyToClipboard(result.submitted_hash)}
-                className="hover:text-white transition-colors"
-                title="Copy hash"
-              >
-                {copiedHash ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              </button>
-            </div>
-            <p className="text-emerald-400 text-xs break-all select-all">{result.submitted_hash}</p>
-          </div>
-
-          {/* Matched Asset Details */}
-          {result.matched_asset && (
-            <div className="bg-slate-950/60 border border-slate-800/80 p-5 rounded-2xl space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-                  <Layers className="w-4 h-4" />
-                  Matched Registered Asset
-                </span>
-                <Link
-                  to={`/assets/${result.matched_asset.asset_id}`}
-                  className="text-xs text-blue-400 hover:underline flex items-center gap-1 font-medium"
+        <div className="space-y-6">
+          {/* Main Status Banner */}
+          <div
+            className={`border-2 border-[#171717] shadow-[8px_8px_0px_#171717] p-6 sm:p-8 ${
+              result.is_match && result.verification_result === 'EXACT_MATCH'
+                ? 'bg-[#55AAA7]/20 border-l-8 border-l-[#55AAA7]'
+                : result.verification_result === 'NOT_REGISTERED'
+                ? 'bg-[#E5E0D8] border-l-8 border-l-[#171717]'
+                : 'bg-[#E9786D]/20 border-l-8 border-l-[#E9786D]'
+            }`}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b-2 border-[#171717]">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-12 h-12 border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center justify-center ${
+                    result.is_match ? 'bg-[#55AAA7] text-[#171717]' : 'bg-[#E9786D] text-[#171717]'
+                  }`}
                 >
-                  View Details & History <ExternalLink className="w-3 h-3" />
-                </Link>
+                  {result.is_match ? (
+                    <CheckCircle2 className="w-7 h-7" />
+                  ) : (
+                    <XCircle className="w-7 h-7" />
+                  )}
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#666666]">
+                    Verification Verdict
+                  </span>
+                  <h2 className="text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-[#171717]">
+                    {result.verification_result.replace(/_/g, ' ')}
+                  </h2>
+                </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-3 text-xs">
-                <div>
-                  <span className="text-slate-400 text-[10px] uppercase">Title</span>
-                  <p className="font-semibold text-white">{result.matched_asset.title}</p>
-                </div>
-                <div>
-                  <span className="text-slate-400 text-[10px] uppercase">Registered Creator</span>
-                  <p className="text-slate-200">{result.matched_asset.creator_name || 'N/A'}</p>
-                </div>
-                <div>
-                  <span className="text-slate-400 text-[10px] uppercase">Category</span>
-                  <p className="text-slate-200">{result.matched_asset.category_name || 'N/A'}</p>
-                </div>
-                <div>
-                  <span className="text-slate-400 text-[10px] uppercase">Matched Version</span>
-                  <p className="font-mono text-blue-400">v{result.matched_version?.version_number ?? 1}</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <StatusBadge status={result.verification_result} />
               </div>
             </div>
-          )}
 
-          {/* Blockchain Verification Proof */}
-          {result.blockchain_verification && (
-            <div className="bg-slate-950/60 border border-slate-800/80 p-5 rounded-2xl space-y-2 text-xs font-mono">
-              <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4" />
-                On-Chain Smart Contract Proof
-              </span>
-              <p className="text-slate-300 truncate">
-                Tx: {result.blockchain_verification.transaction_hash}
-              </p>
-              <div className="flex justify-between text-slate-400 text-[11px] pt-1">
-                <span>Block #{result.blockchain_verification.block_number}</span>
-                <span>Registrant: {result.blockchain_verification.registrant?.slice(0, 10)}...</span>
+            {/* Digest Details */}
+            <div className="pt-4 space-y-3 font-mono text-xs">
+              <div className="bg-[#FFFFFF] p-3 border-2 border-[#171717] space-y-1">
+                <div className="flex items-center justify-between text-[10px] text-[#666666] font-bold uppercase">
+                  <span>Computed File SHA-256 Digest</span>
+                  <button
+                    onClick={() => copyToClipboard(result.submitted_hash)}
+                    className="px-2 py-0.5 bg-[#F8F6F2] hover:bg-[#E9786D] text-[#171717] border border-[#171717] shadow-[1px_1px_0px_#171717] flex items-center gap-1 transition-all"
+                  >
+                    {copiedHash ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    {copiedHash ? 'COPIED' : 'COPY'}
+                  </button>
+                </div>
+                <p className="break-all font-bold text-[#171717] select-all">
+                  {result.submitted_hash}
+                </p>
               </div>
-            </div>
-          )}
 
-          {/* Competing Claims Warning Box */}
-          {result.competing_claim_count > 0 && (
-            <div className="p-4 bg-amber-950/40 border border-amber-800/60 rounded-2xl space-y-2 text-xs">
-              <div className="flex items-center gap-2 text-amber-300 font-semibold">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
-                Competing Claims Notice ({result.competing_claim_count} additional registered claim{result.competing_claim_count > 1 ? 's' : ''})
-              </div>
-              <p className="text-slate-300 text-[11px] leading-relaxed">
-                Other creators have independently submitted matching files to the registry. The blockchain timestamps establish prior registration order objectively.
-              </p>
-              {result.competing_claims && result.competing_claims.length > 0 && (
-                <div className="space-y-1.5 pt-2">
-                  {result.competing_claims.map((c, i) => (
-                    <div key={i} className="p-2 bg-slate-950/60 rounded border border-slate-800 flex justify-between text-[11px]">
-                      <span className="text-slate-200">{c.title} ({c.creator_name})</span>
-                      <span className="text-slate-400 font-mono">{new Date(c.registered_at).toLocaleDateString()}</span>
+              {/* On-Chain Record Verification Box */}
+              {result.blockchain_verification && (
+                <div className="bg-[#FFFFFF] p-4 border-2 border-[#171717] shadow-[3px_3px_0px_#171717] space-y-2">
+                  <div className="flex items-center justify-between text-[10px] uppercase font-bold text-[#666666] border-b border-[#171717] pb-1.5">
+                    <span className="flex items-center gap-1 text-[#55AAA7]">
+                      <ShieldCheck className="w-4 h-4" /> Blockchain Proof Validated
+                    </span>
+                    <span>Status: {result.blockchain_verification.verified ? 'CONFIRMED' : 'UNCONFIRMED'}</span>
+                  </div>
+
+                  <div className="grid sm:grid-cols-3 gap-2 pt-1 text-[11px]">
+                    <div>
+                      <span className="text-[#666666] uppercase text-[10px] block font-bold">Transaction</span>
+                      <span className="font-bold text-[#171717] truncate block" title={result.blockchain_verification.transaction_hash}>
+                        {result.blockchain_verification.transaction_hash
+                          ? `${result.blockchain_verification.transaction_hash.slice(0, 10)}...`
+                          : '—'}
+                      </span>
                     </div>
-                  ))}
+                    <div>
+                      <span className="text-[#666666] uppercase text-[10px] block font-bold">Block Number</span>
+                      <span className="font-bold text-[#171717]">#{result.blockchain_verification.block_number ?? '—'}</span>
+                    </div>
+                    <div>
+                      <span className="text-[#666666] uppercase text-[10px] block font-bold">Block Timestamp</span>
+                      <span className="font-bold text-[#171717]">
+                        {result.blockchain_verification.blockchain_timestamp
+                          ? new Date(result.blockchain_verification.blockchain_timestamp).toLocaleString()
+                          : '—'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Competing Claims Section */}
+              {result.competing_claims && result.competing_claims.length > 0 && (
+                <div className="bg-[#FFFFFF] border-2 border-[#171717] p-4 shadow-[4px_4px_0px_#171717] space-y-3">
+                  <div className="flex items-center gap-2 text-[#E9786D] font-bold text-xs uppercase tracking-wider">
+                    <ShieldAlert className="w-4 h-4" />
+                    Competing Claims Detected ({result.competing_claims.length})
+                  </div>
+                  <p className="text-[11px] text-[#666666] font-sans">
+                    Multiple distinct claimants have registered identical file fingerprints. They are listed below in chronological order of blockchain registration to establish prior possession objectively.
+                  </p>
+                  <div className="space-y-2">
+                    {result.competing_claims.map((claim, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 bg-[#F8F6F2] border border-[#171717] flex items-center justify-between text-xs"
+                      >
+                        <div>
+                          <span className="font-bold text-[#171717]">{claim.creator_name}</span>
+                          <span className="text-[#666666] ml-2 font-mono">Asset {claim.asset_id}</span>
+                        </div>
+                        <span className="font-mono text-[10px] text-[#666666]">
+                          {claim.registered_at ? new Date(claim.registered_at).toLocaleDateString() : ''}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          )}
 
-          {/* Legal Disclaimer returned by backend */}
-          <div className="p-4 bg-slate-950/60 border border-slate-800/80 rounded-2xl text-[11px] text-slate-400 leading-relaxed">
-            <span className="font-semibold text-slate-300 uppercase block mb-1">Legal Notice:</span>
-            {result.legal_disclaimer}
+            {/* Target Asset Link if matched */}
+            {result.matched_asset && (
+              <div className="pt-4 flex justify-end">
+                <Link
+                  to={`/assets/${result.matched_asset.asset_id}`}
+                  className="px-4 py-2 bg-[#191B20] hover:bg-[#171717] text-white font-extrabold uppercase text-xs border-2 border-[#171717] shadow-[2px_2px_0px_#171717] flex items-center gap-1.5 transition-all"
+                >
+                  Inspect Matched Asset Record <ArrowRight className="w-3.5 h-3.5 text-[#E9786D]" />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
