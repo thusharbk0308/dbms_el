@@ -109,26 +109,29 @@ export const LoginPage: React.FC = () => {
           <div className="grid grid-cols-3 gap-2 text-[10px]">
             <button
               type="button"
-              onClick={() => fillDemo('alice@chainproof.io', 'CreatorPass123!')}
+              onClick={() => fillDemo('alice@chainproof.io', 'SecurePassword123!')}
               className="px-2 py-1.5 bg-[#F8F6F2] hover:bg-[#E9786D] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] font-bold uppercase text-center transition-all truncate"
             >
               Alice (Creator)
             </button>
             <button
               type="button"
-              onClick={() => fillDemo('bob@chainproof.io', 'CreatorPass123!')}
+              onClick={() => fillDemo('bob@chainproof.io', 'SecurePassword123!')}
               className="px-2 py-1.5 bg-[#F8F6F2] hover:bg-[#82A9D4] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] font-bold uppercase text-center transition-all truncate"
             >
               Bob (Creator)
             </button>
             <button
               type="button"
-              onClick={() => fillDemo('admin@chainproof.io', 'AdminPass123!')}
+              onClick={() => fillDemo('admin@chainproof.io', 'SecurePassword123!')}
               className="px-2 py-1.5 bg-[#F8F6F2] hover:bg-[#55AAA7] text-[#171717] border-2 border-[#171717] shadow-[2px_2px_0px_#171717] font-bold uppercase text-center transition-all truncate"
             >
               Admin (Root)
             </button>
           </div>
+          <p className="text-[10px] font-mono text-[#666666] text-center pt-1">
+            Default Password: <span className="font-bold text-[#171717]">SecurePassword123!</span>
+          </p>
         </div>
 
         <div className="text-center pt-2">
