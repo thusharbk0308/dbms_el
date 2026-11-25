@@ -702,15 +702,18 @@ flowchart TD
 
 ### 4.3 DFD Level 2 (Sub-Process Decomposition)
 
+The Level 2 Data Flow Diagrams provide an in-depth functional decomposition of the four most critical sub-processes within the ChainProof platform:
+
 #### 4.3.1 Asset Registration & Streaming Hashing Pipeline (Process 2.0)
+This sub-process handles the multipart ingestion of digital files, computes collision-resistant SHA-256 hashes using a bounded 64KB chunk buffer to ensure $O(1)$ memory consumption, stores metadata across atomic relational transaction boundaries, and queues the asset for on-chain anchoring:
 
 ```mermaid
 flowchart TD
-    InFile[/Uploaded Multipart File/] --> Step1["2.1 Read File Stream in 64KB Chunks"]
+    InFile[/Uploaded Multipart File Stream/] --> Step1["2.1 Read File Stream in 64KB Chunks"]
     Step1 --> Step2["2.2 Accumulate SHA-256 Digest in hashlib"]
     Step2 --> Step3["2.3 Persist File to Off-Chain Storage with UUID Name"]
     Step3 --> Step4["2.4 BEGIN Database Transaction"]
-    Step4 --> Step5["2.5 INSERT INTO assets"]
+    Step4 --> Step5["2.5 INSERT INTO assets (creator_id, category_id, metadata)"]
     Step5 --> Step6["2.6 INSERT INTO asset_versions (version=1, file_hash)"]
     Step6 --> Step7["2.7 INSERT INTO audit_logs (action='ASSET_REGISTERED')"]
     Step7 --> Step8{"2.8 Database Commit Successful?"}
@@ -718,27 +721,59 @@ flowchart TD
     Step8 -- No --> Step10["2.10 ROLLBACK Transaction & Remove File from Disk"]
 ```
 
-#### 4.3.2 Dual-Mode Verification Engine (Process 4.0)
+#### 4.3.2 Blockchain Anchoring & Transaction Receipt Pipeline (Process 3.0)
+This sub-process takes the verified asset record, constructs the Web3 transaction payload, interfaces with the Ethereum node via JSON-RPC, awaits block mining, and updates relational records:
+
+```mermaid
+flowchart TD
+    Trigger[/Anchor Task: asset_id, version_num, file_hash/] --> B1["3.1 Formulate Contract ABI Payload"]
+    B1 --> B2["3.2 Connect to Ethereum Node via Web3.py JSON-RPC"]
+    B2 --> B3["3.3 Invoke IPRegistry.registerAsset(assetId, version, hash)"]
+    B3 --> B4{"3.4 Transaction Mined into Block?"}
+    B4 -- Success --> B5["3.5 Parse BlockNumber, BlockTimestamp, TxHash"]
+    B5 --> B6["3.6 INSERT INTO blockchain_records (status='CONFIRMED')"]
+    B6 --> B7["3.7 UPDATE assets SET registration_status='CONFIRMED'"]
+    B4 -- Node Down / Revert --> B8["3.8 UPDATE assets SET registration_status='PENDING' (Queue Retry)"]
+```
+
+#### 4.3.3 Dual-Mode Verification & Competing Claims Engine (Process 4.0)
+This sub-process enables public, unauthenticated or authenticated stakeholders to verify digital files via direct file upload or 64-hex hash string. It evaluates database fingerprints, cross-examines on-chain smart contract state, and differentiates between single ownership and competing chronological claims:
 
 ```mermaid
 flowchart TD
     QueryIn[/User Input: Raw File OR Hex String/] --> V1{"Input Type?"}
-    V1 -- Raw File --> V2["Compute Streaming SHA-256 Digest"]
+    V1 -- Raw File --> V2["Compute Streaming SHA-256 Digest (64KB Buffer)"]
     V1 -- Hex String --> V3["Validate Regex: ^[a-fA-F0-9]{64}$"]
     V2 --> V4["Normalized 64-char Hex Hash"]
     V3 --> V4
     V4 --> V5["Query asset_versions WHERE file_hash = :hash"]
     V5 --> V6{"Records Found?"}
     V6 -- None --> V7["Verdict: NOT_REGISTERED"]
-    V6 -- Exactly One --> V8["Cross-Check BLOCKCHAIN_RECORDS & Smart Contract"]
+    V6 -- Exactly One --> V8["Cross-Check BLOCKCHAIN_RECORDS & Smart Contract State"]
     V6 -- Multiple (>1) --> V9["Verdict: COMPETING_CLAIMS (Order by created_at ASC)"]
     V8 --> V10{"On-Chain Match Verified?"}
     V10 -- Match --> V11["Verdict: EXACT_MATCH"]
     V10 -- Mismatch / Revert --> V12["Verdict: BLOCKCHAIN_VERIFICATION_FAILED"]
-    V7 --> V13["INSERT INTO verifications & Return Result"]
+    V7 --> V13["INSERT INTO verifications (log query) & Return Verdict"]
     V9 --> V13
     V11 --> V13
     V12 --> V13
+```
+
+#### 4.3.4 Dispute Adjudication & Administrative Resolution Lifecycle (Process 6.0)
+This sub-process allows stakeholders to contest ownership or report unauthorized registration. The system logs dispute details with evidence attachments, alerts the administrator queue, and records all review decisions in permanent audit trails:
+
+```mermaid
+flowchart TD
+    DisputeIn[/User Dispute Filing: asset_id, description, evidence_file/] --> D1["6.1 Validate Claimant Credentials & Asset State"]
+    D1 --> D2["6.2 Persist Evidence File & INSERT INTO disputes (status='PENDING')"]
+    D2 --> D3["6.3 Alert Admin Console Review Queue"]
+    D3 --> D4["6.4 Administrator Evaluates Timestamps, Block Receipts & Evidence"]
+    D4 --> D5{"6.5 Admin Resolution Decision"}
+    D5 -- Confirm Infringement --> D6["6.6 UPDATE disputes SET dispute_status='RESOLVED'"]
+    D5 -- Reject Challenge --> D7["6.7 UPDATE disputes SET dispute_status='REJECTED'"]
+    D6 --> D8["6.8 INSERT INTO audit_logs (action='DISPUTE_ADJUDICATED')"]
+    D7 --> D8
 ```
 
 ---

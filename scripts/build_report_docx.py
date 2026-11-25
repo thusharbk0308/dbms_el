@@ -159,9 +159,46 @@ def create_report_docx(output_path):
     
     # --- CHAPTER 4 ---
     add_title("CHAPTER 4: DATA FLOW DIAGRAM (DFD)", level=1)
-    add_p("• DFD Level 0 (Context Level): External entities (Creator, Verifier, Admin, Ethereum Node) interact with ChainProof.")
-    add_p("• DFD Level 1 (Major Processes): Auth & RBAC (1.0), Asset Ingestion & Hashing (2.0), Blockchain Anchoring (3.0), Public Verification (4.0), Licensing Management (5.0), and Dispute/Audit Adjudication (6.0).")
-    add_p("• DFD Level 2: Decomposes the streaming SHA-256 pipeline and dual-mode verification decision trees.")
+    add_title("4.1 DFD Level 0 (Context Diagram)", level=2)
+    add_p("The Level 0 Context Diagram depicts the holistic boundary of the ChainProof system with external entities: Digital Creators, Public Verifiers, System Administrators, and the Ethereum Blockchain (Hardhat / Testnet Node). Creators transmit multipart asset media and metadata, receiving signed JWT tokens and deterministic SHA-256 fingerprints. Verifiers submit files or 64-hex strings and receive provenance reports. Administrators manage dispute reviews and audit logs. The Ethereum smart contract acts as an external decentralized consensus witness via JSON-RPC.")
+    
+    add_title("4.2 DFD Level 1 (Major System Processes)", level=2)
+    add_p("The Level 1 diagram decomposes the system into six core functional subsystems interacting with the normalized PostgreSQL data stores (USERS, CATEGORIES, ASSETS, ASSET_VERSIONS, BLOCKCHAIN_RECORDS, LICENSES, VERIFICATIONS, DISPUTES, AUDIT_LOGS):")
+    add_p("• Process 1.0 (Authentication & RBAC): Validates credentials, issues JWT tokens, and enforces role access.")
+    add_p("• Process 2.0 (Asset Ingestion & Hashing): Ingests media streams, computes streaming SHA-256 digests, and executes atomic DB transactions.")
+    add_p("• Process 3.0 (Blockchain Anchoring Service): Submits registerAsset transactions to IPRegistry.sol and records mined receipts.")
+    add_p("• Process 4.0 (Public Verification Engine): Ingests candidate hashes/files, queries database versions, verifies on-chain contracts, and classifies verdicts.")
+    add_p("• Process 5.0 (Licensing Management): Manages issuance, expiry bounds, and revocation of digital licenses.")
+    add_p("• Process 6.0 (Dispute & Audit Adjudication): Handles contested ownership claims and administrative audit logging.")
+
+    add_title("4.3 DFD Level 2 (Sub-Process Decomposition)", level=2)
+    add_p("The Level 2 diagrams provide deep functional breakdowns of the four most critical sub-processes:")
+    add_p("4.3.1 Process 2.0: Asset Ingestion & Streaming SHA-256 Hashing Pipeline", bold_prefix="• ")
+    add_p("  1. Ingest multipart upload stream in bounded 64KB chunks to guarantee strict O(1) constant memory usage.\n"
+          "  2. Incrementally accumulate bytes into hashlib.sha256() without buffering the full file into server RAM.\n"
+          "  3. Persist file payload to protected off-chain storage with a sanitized UUID filename.\n"
+          "  4. Open an ACID database transaction: insert metadata into ASSETS, version 1 into ASSET_VERSIONS, and an audit trail entry into AUDIT_LOGS.\n"
+          "  5. If the transaction succeeds, dispatch an asynchronous Web3 task; if it fails, roll back database state and delete the physical file.")
+    add_p("4.3.2 Process 3.0: Blockchain Anchoring & Transaction Receipt Pipeline", bold_prefix="• ")
+    add_p("  1. Retrieve pending asset ID, version number, and 64-character SHA-256 hex digest.\n"
+          "  2. Connect to the local Hardhat or external EVM node via Web3.py JSON-RPC.\n"
+          "  3. Invoke registerAsset(assetId, versionNumber, fileHash) on IPRegistry.sol.\n"
+          "  4. Await transaction mining, parse transaction receipt (blockNumber, blockTimestamp, txHash).\n"
+          "  5. Commit BLOCKCHAIN_RECORDS tuple and update ASSETS registration_status to 'CONFIRMED'. If node is unavailable, set status to 'PENDING' for background retry.")
+    add_p("4.3.3 Process 4.0: Dual-Mode Public Verification & Competing Claims Engine", bold_prefix="• ")
+    add_p("  1. Accept verification input: raw multipart file upload or 64-character hexadecimal SHA-256 string.\n"
+          "  2. Normalize hash (via streaming computation or strict regex validation ^[a-fA-F0-9]{64}$).\n"
+          "  3. Query ASSET_VERSIONS for matching file_hash values.\n"
+          "  4. If zero rows match: Return 'NOT_REGISTERED'.\n"
+          "  5. If multiple rows match: Return 'COMPETING_CLAIMS' ordered chronologically by created_at.\n"
+          "  6. If exactly one row matches: Cross-examine on-chain state via IPRegistry.sol. If verified, return 'EXACT_MATCH'; if reverted/mismatched, return 'BLOCKCHAIN_VERIFICATION_FAILED'.\n"
+          "  7. Record the verification query into the VERIFICATIONS table for analytics and security auditing.")
+    add_p("4.3.4 Process 6.0: Dispute Adjudication & Administrative Resolution Lifecycle", bold_prefix="• ")
+    add_p("  1. Stakeholder files dispute citing asset_id, infringement justification, and optional evidence attachment.\n"
+          "  2. Validate asset existence and persist dispute entry with status 'PENDING'.\n"
+          "  3. Notify administrator console dispute review queue.\n"
+          "  4. Administrator inspects timestamps, on-chain block proofs, and submitted evidence documents.\n"
+          "  5. Admin updates dispute status to 'RESOLVED' or 'REJECTED', appending an immutable record to AUDIT_LOGS.")
     
     # --- CHAPTER 5 ---
     add_title("CHAPTER 5: RELATIONAL SCHEMA AND NORMALIZATION", level=1)

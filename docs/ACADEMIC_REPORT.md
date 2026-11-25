@@ -170,6 +170,72 @@ flowchart TD
     P5 -->|Synthesized Verification Report| Verifier
 ```
 
+#### 7.3 DFD Level 2 (Functional Decomposition)
+
+##### 7.3.1 DFD Level 2: Asset Ingestion & Streaming SHA-256 Hashing (Process 2.0)
+```mermaid
+flowchart TD
+    InFile[/Uploaded Multipart File Stream/] --> Step1["2.1 Ingest Stream in 64KB Buffer Chunks"]
+    Step1 --> Step2["2.2 hashlib.sha256() Incremental State Accumulator"]
+    Step2 --> Step3["2.3 Persist File to Off-Chain Protected Storage (UUID Name)"]
+    Step3 --> Step4["2.4 BEGIN ACID Database Transaction"]
+    Step4 --> Step5["2.5 INSERT INTO assets (metadata, creator_id, category_id)"]
+    Step5 --> Step6["2.6 INSERT INTO asset_versions (version_number=1, file_hash)"]
+    Step6 --> Step7["2.7 INSERT INTO audit_logs (action='ASSET_REGISTERED')"]
+    Step7 --> Step8{"2.8 DB Commit Succeeded?"}
+    Step8 -- Yes --> Step9["2.9 Dispatch Asynchronous Web3 Anchor Task"]
+    Step8 -- No --> Step10["2.10 ROLLBACK & Remove File from Disk (Purge Payload)"]
+```
+
+##### 7.3.2 DFD Level 2: Blockchain Anchoring & Transaction Receipt Pipeline (Process 3.0 / 4.0)
+```mermaid
+flowchart TD
+    Trigger[/Anchor Task: asset_id, version_num, file_hash/] --> B1["3.1 Formulate Contract ABI Payload"]
+    B1 --> B2["3.2 Connect to Ethereum Node via Web3.py JSON-RPC"]
+    B2 --> B3["3.3 Invoke IPRegistry.registerAsset(assetId, version, hash)"]
+    B3 --> B4{"3.4 Transaction Mined into Block?"}
+    B4 -- Success --> B5["3.5 Parse BlockNumber, BlockTimestamp, TxHash"]
+    B5 --> B6["3.6 INSERT INTO blockchain_records (status='CONFIRMED')"]
+    B6 --> B7["3.7 UPDATE assets SET registration_status='CONFIRMED'"]
+    B4 -- Node Down / Revert --> B8["3.8 UPDATE assets SET registration_status='PENDING' (Queue Retry)"]
+```
+
+##### 7.3.3 DFD Level 2: Dual-Mode Public Verification & Competing Claims Engine (Process 5.0)
+```mermaid
+flowchart TD
+    QueryIn[/User Input: Arbitrary File OR 64-Hex Digest/] --> V1{"Input Mechanism?"}
+    V1 -- Raw File --> V2["Compute 64KB Chunked Streaming SHA-256 Digest"]
+    V1 -- 64-Hex String --> V3["Validate Regex: ^[a-fA-F0-9]{64}$"]
+    V2 --> V4["Normalized SHA-256 Hex Digest"]
+    V3 --> V4
+    V4 --> V5["Query asset_versions WHERE file_hash = :hash"]
+    V5 --> V6{"Matching Records Found?"}
+    V6 -- None --> V7["Verdict: NOT_REGISTERED"]
+    V6 -- Single Match --> V8["Cross-Check On-Chain State via IPRegistry.sol"]
+    V6 -- Multiple Matches (>1) --> V9["Verdict: COMPETING_CLAIMS (Order by created_at ASC)"]
+    V8 --> V10{"Smart Contract Fingerprint Matches?"}
+    V10 -- Match Verified --> V11["Verdict: EXACT_MATCH"]
+    V10 -- Reverted / Mismatch --> V12["Verdict: BLOCKCHAIN_VERIFICATION_FAILED"]
+    V7 --> V13["INSERT INTO verifications (log outcome) & Return JSON Report"]
+    V9 --> V13
+    V11 --> V13
+    V12 --> V13
+```
+
+##### 7.3.4 DFD Level 2: Dispute Adjudication & Audit Resolution Lifecycle (Process 6.0)
+```mermaid
+flowchart TD
+    DisputeIn[/User Dispute Filing: asset_id, reason, evidence_file/] --> D1["6.1 Validate Claimant Credentials & Asset Existence"]
+    D1 --> D2["6.2 Persist Evidence Document & INSERT INTO disputes (status='PENDING')"]
+    D2 --> D3["6.3 Alert Admin Console Dispute Review Queue"]
+    D3 --> D4["6.4 Administrator Reviews Proofs, Timestamps & On-Chain Blocks"]
+    D4 --> D5{"6.5 Admin Adjudication Decision"}
+    D5 -- Mark Resolved --> D6["6.6 UPDATE disputes SET dispute_status='RESOLVED'"]
+    D5 -- Reject Claim --> D7["6.7 UPDATE disputes SET dispute_status='REJECTED'"]
+    D6 --> D8["6.8 INSERT INTO audit_logs (action='DISPUTE_ADJUDICATED')"]
+    D7 --> D8
+```
+
 ---
 
 ### 8. Entity-Relationship (ER) Modeling & Relational Schema
