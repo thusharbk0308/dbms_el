@@ -51,11 +51,16 @@ ChainProof/
 │   ├── triggers.sql             # Audit and immutability triggers
 │   ├── sample_data.sql          # Seed dataset (users, categories, assets)
 │   └── demonstration_queries.sql# Academic DBMS demonstration queries
-├── docs/                        # Technical documentation
+├── docs/                        # Technical documentation & Academic deliverables
+│   ├── DBMS_MINI_PROJECT_REPORT.md # Official RVCE 5th Sem DBMS Mini-Project Report
+│   ├── TECHNOLOGY_STACK_AND_ARCHITECTURE_DEEP_DIVE.md # Exhaustive Tech Stack & Architectural Justifications
+│   ├── ACADEMIC_REPORT.md       # Academic Project Dossier
 │   ├── ER_DIAGRAM.md            # Mermaid ER diagram & cardinality breakdown
 │   ├── DATABASE_DESIGN.md       # Normalization analysis up to 3NF & ACID properties
 │   ├── API_DOCUMENTATION.md     # REST endpoint contracts & payloads
-│   └── SETUP_GUIDE.md           # Setup and running instructions
+│   ├── PRESENTATION_GUIDE.md    # Presentation & Viva Voce preparation guide
+│   ├── SETUP_GUIDE.md           # Setup and running instructions
+│   └── screenshots/             # 7 High-resolution platform UI captures
 ├── docker-compose.yml           # PostgreSQL container setup
 ├── .env.example                 # Environment configuration template
 └── README.md
